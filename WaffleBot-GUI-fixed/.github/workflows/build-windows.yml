@@ -1,0 +1,45 @@
+name: Build Windows
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-pkgconf
+            mingw-w64-ucrt-x86_64-qt6-base
+            mingw-w64-ucrt-x86_64-libsndfile
+
+      - name: Build
+        run: |
+          cd WaffleBot-GUI-fixed
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
+
+      - name: Collect DLLs
+        run: |
+          cd WaffleBot-GUI-fixed
+          mkdir -p dist
+          cp build/WaffleBot-GUI.exe dist/
+          windeployqt6 --no-translations dist/WaffleBot-GUI.exe || true
+          ldd dist/WaffleBot-GUI.exe | grep -i ucrt64 | awk '{print $3}' | xargs -I{} cp -n {} dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WaffleBot-windows
+          path: WaffleBot-GUI-fixed/dist
