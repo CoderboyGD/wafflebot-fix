@@ -1,6 +1,6 @@
 # WaffleBot (fixed version)
 
-THIS IS NOT A LIVE CLICKBOT. I WILL BE MAKING THAT VERY SOON THO.
+# THIS IS NOT A LIVE CLICKBOT. I WILL BE MAKING THAT VERY SOON THO.
 
 This is a modified version of [WaffleBot](https://github.com/skylarc2006/WaffleBot-GUI) by skylarc2006 / skyywaffle, the Geometry Dash clickbot. The original hasn't been updated since July 2025 and had stopped working for me, so I fixed it. All credit for the app, the GUI and the clickpack setup goes to the original author. I just patched the macro loading and the audio rendering.
 
